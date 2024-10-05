@@ -3,7 +3,7 @@ import mysql.connector
 from datetime import datetime, timedelta
 from collections import deque
 from config.database_config import get_db_connection
-from ..models.flight import Flight
+from models.flight import Flight
 
 
 class FlightRepository:
