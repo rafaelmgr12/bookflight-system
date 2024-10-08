@@ -1,7 +1,8 @@
+from typing import  List, Optional
 import mysql.connector
 
 class Role:
-    def __init__(self, name: str, permissions: list):
+    def __init__(self, name: str, permissions: List[str]):
         """Role class to define user roles and their associated permissions."""
         self.name = name
         self.permissions = permissions
@@ -14,7 +15,7 @@ class Role:
         return f"Role(name='{self.name}', permissions={self.permissions})"
 
 class Account:
-    def __init__(self, username: str, password: str, roles: list = None, account_id: int = None, status: str = "active"):
+    def __init__(self, username: str, password: str, roles: Optional[List[str]]= None, account_id: Optional[int] = None, status: str = "active"):
         """Account class representing a user with basic credentials."""
         self.username = username
         self.password = password
@@ -40,6 +41,10 @@ class Account:
 
     def _is_admin(self):
         return "admin" in self.roles
+    
+    @property
+    def status(self):
+        return self._status
 
 class CLIAuthenticator:
     def __init__(self):
@@ -52,6 +57,7 @@ class CLIAuthenticator:
         )
         self.cursor = self.conn.cursor()
 
+  
     def register(self, account: Account) -> bool:
         """Register a new account and assign a role."""
         # Check if the username already exists in the database
@@ -67,7 +73,7 @@ class CLIAuthenticator:
         INSERT INTO Account (username, password, status)
         VALUES (%s, %s, %s)
         """
-        self.cursor.execute(insert_query, (account.username, account.password, account._status))
+        self.cursor.execute(insert_query, (account.username, account.password, account.status))
         account_id = self.cursor.lastrowid
 
         # Store role ID in a variable for a future query
