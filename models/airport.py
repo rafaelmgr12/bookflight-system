@@ -1,9 +1,19 @@
+from typing import List
+from .flight import Flight
+from .address import Address
+
+
 class Airport:
-    def __init__(self, name, code, address: Address):
+
+    __code: str
+    __name: str
+    __address: Address
+
+    def __init__(self, name: str, code: str, address: Address):
         self.__code = code
         self.__name = name
         self.__address = address
-        self.__flights = []
+        self.__flights:List[Flight] = []
 
     # String representation
     def __repr__(self):
@@ -33,14 +43,14 @@ class Airport:
         return self.__flights
 
     # Helper functions
-    def add_flight(self, flight):
+    def add_flight(self, flight:Flight):
         self.__flights.append(flight)
 
-    def remove_flight(self, flight):
+    def remove_flight(self, flight:Flight):
         if flight in self.__flights:
             self.__flights.remove(flight)
 
-    def get_flight_by_code(self, flight_code):
+    def get_flight_by_code(self, flight_code: str):
         for flight in self.__flights:
             if flight.get_code() == flight_code:
                 return flight
